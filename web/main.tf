@@ -32,7 +32,7 @@ resource "aws_security_group" "web_server_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags {
+  tags = {
     Name        = "${var.environment}-web-server-sg"
     Environment = "${var.environment}"
   }
@@ -64,7 +64,7 @@ resource "aws_security_group" "web_inbound_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags {
+  tags = {
     Name = "${var.environment}-web-inbound-sg"
   }
 }
@@ -103,9 +103,10 @@ resource "aws_elb" "web" {
     lb_protocol       = "http"
   }
 
-  instances = ["${aws_instance.web.*.id}"]
+  //instances = ["${aws_instance.web.*.id}"]
+  instances = "${aws_instance.web[*].id}"
 
-  tags {
+  tags = {
     Environment = "${var.environment}"
   }
 }
